@@ -1,68 +1,158 @@
-# 通过键盘输入的方式来录入5个学生3门课程的成绩并保存在列表中
-# scores = []
-# for _ in range(5):
-#     temp = []
-#     for _ in range(3):
-#         score = input("请输入成绩：")
-#         temp.append(score)
-#     scores.append(temp)
-# print(scores)
-# 通过产生随机数的方式来生成5个学生3门课程的成绩并保存在列表中
+# # 生成一个随机验证码
+# import string
 # import random
-#
-# scores = [[random.randrange(60,101) for _ in range(3)] for _ in range(5)]
-# print(scores)
-# 双色球
-import random
 
-from rich.console import Console
-from rich.table import Table
+# # 设置验证码格式：字母加数字
+# all_chars = string.digits + string.ascii_letters
 
-# red_balls = list(range(1,34))
-# current_balls = []
-# for _ in range(6):
-#     index = random.randrange(len(red_balls))
-#     current_balls.append(red_balls.pop(index))
-#
-# current_balls.sort()
-# for ball in current_balls:
-#     print(f"\033[031m{ball:0>2d}\033[0m",end = ' ')
-# blue_balls = random.randrange(1,17)
-# print(f'\033[034m{blue_balls:0>2d}\033[0m')
+# def generate_code(code_len = 4):
+#     return ''.join(random.choices(all_chars,k = code_len))
 
-# n = int(input("生成几注？"))
+
+# for _ in range(5):
+#     print(generate_code(6))
+
+
+# 判断素数：
+
+# def is_prime(num:int) -> bool:
+#     """
+    
+#     """
+#     for i in range(2,int(num ** 0.5)+1):
+#         if num % i == 0:
+#             return False
+#     return True
+
+# res = is_prime(97)
+# print(res)
+
+
+# 最大公约数、最小公倍数
+
+# def lcm(x:int,y:int):
+#     return x*y//gcd(x,y)
+
+
+# def gcd(x : int,y : int):
+#     while y % x != 0:
+#         x,y = y%x,x
+#     return x
+    
+
+# res = lcm(16,99)
+# print(res)
+
+# 双色球随机选号：
+
+# import random
+# RED = '\033[31m'
+# BLUE = '\033[34m'
+# RESET = '\033[0m'
+
 # red_balls = [i for i in range(1,34)]
-# blu_balls = [i for i in range(1,17)]
+# blue_balls = [i for i in range(1,17)]
+
+# def choose():
+#     selectd_balls = random.sample(red_balls,6)
+#     selectd_balls.sort()
+#     selectd_balls.append(random.choice(blue_balls))
+#     return selectd_balls
+
+# def display(balls):
+#     for ball in balls[:-1]:
+#         print(f"{RED}{ball:0>2d}{RESET}",end = ' ')
+#     print(f"{BLUE}{balls[-1]:0>2d}{RESET}")
+
+# n = int(input('生成几注号码？'))
 # for _ in range(n):
-#     select_balls = random.sample(red_balls,6)
-#     select_balls.sort()
-#     for ball in select_balls:
-#         print(f"\033[031m{ball:0>2d}\033[0m",end = ' ')
-#     blue_balls = random.choice(blu_balls)
-#     print(f'\033[034m{blue_balls:0>2d}\033[0m')
+#     display(choose())
 
 
-console = Console()
+# 生成制定长度的验证码
 
-n = int(input("生成几注？"))
-red_balls = [i for i in range(1,34)]
-blue_balls = [i for i in range(1,17)]
+# import random
+# import string
 
-table = Table(show_header=True)
-for col_name in ('序号','红球','蓝球','最终'):
-    table.add_column(col_name,justify='center')
+# all_chars = string.digits + string.ascii_letters
 
-for i in range(n):
-    current_ball = random.sample(red_balls,6)
-    current_ball.sort()
-    blue_ball = random.choice(blue_balls)
 
-    table.add_row(
-        str(i+1),
-        f'[red]{" ".join([f"{ball:0>2d}" for ball in current_ball])}[/red]',
-        # f'{" ".join([f"{ball:0>2d}" for ball in current_ball])}',
-        f'[blue]{blue_ball:0>2d}[/blue]',
-        f'[red]{" ".join([f"{ball:0>2d}" for ball in current_ball])}[/red] [blue]{blue_ball:0>2d}[/blue]'
-    )
+# def make_code(code_len = 4):
+#     return ''.join(random.choices(all_chars,k=code_len))
 
-console.print(table)
+# for _ in range(4):
+#     print(make_code(6))
+
+
+
+# def add(x,y):
+#     return x+y
+
+# def mul(x,y):
+#     return x*y
+
+# def cal(init_value,op_func,*args,**kwargs):
+#     items = list(args) + list(kwargs.values())
+#     result = init_value
+
+#     for item in items:
+#         if type(item) in (int,float):
+#             result = op_func(result,item)
+
+#     return result
+
+
+# print(cal(3,add,1))
+
+
+# def is_even(num):
+#     return num % 2 == 0
+
+# def square(num):
+#     return num ** 2
+
+# old_num = [35,2,4,6,8,9]
+# new_num = list(map(square,filter(is_even,old_num)))
+# new_nums = [num ** 2 for num in old_num if num % 2 == 0]
+# new_nums2 = list(map(lambda x:x**2,filter(lambda x:x%2== 0,old_num)))
+# print(new_nums2)
+# old_strings = ['in', 'apple', 'zoo', 'waxberry', 'pear']
+# new_strings = sorted(old_strings,key=len)
+# print(new_strings)
+# print(old_strings)
+# old_strings.sort(key=len)
+# print(old_strings)
+
+# import functools
+# import operator
+
+# fac = lambda n: functools.reduce(operator.mul,range(2,n+1),1)
+# print(fac(6))
+
+# def mull(nums):
+#     res = 1
+#     for i in range(1,nums+1):
+#         res *= i
+
+#     return res
+
+# res1 = mull(6)
+# print(res1)
+
+
+def is_prime(num):
+    for i in range(2,int((num**0.5)+1)):
+        if num % i == 0:
+            return False
+    return True
+
+is_prime1 = lambda x: all(map(lambda f: x%f,range(2,int(x**0.5)+1)))
+
+
+def is_prime2(num):
+    return num > 1 and all(num%f for f in range(2,int(num ** 0.5)+ 1))
+
+
+print(is_prime(67))
+print(is_prime1(67))
+print(is_prime2(67))
