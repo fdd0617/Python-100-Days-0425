@@ -140,19 +140,60 @@
 # print(res1)
 
 
-def is_prime(num):
-    for i in range(2,int((num**0.5)+1)):
-        if num % i == 0:
-            return False
-    return True
+# def is_prime(num):
+#     for i in range(2,int((num**0.5)+1)):
+#         if num % i == 0:
+#             return False
+#     return True
 
-is_prime1 = lambda x: all(map(lambda f: x%f,range(2,int(x**0.5)+1)))
-
-
-def is_prime2(num):
-    return num > 1 and all(num%f for f in range(2,int(num ** 0.5)+ 1))
+# is_prime1 = lambda x: all(map(lambda f: x%f,range(2,int(x**0.5)+1)))
 
 
-print(is_prime(67))
-print(is_prime1(67))
-print(is_prime2(67))
+# def is_prime2(num):
+#     return num > 1 and all(num%f for f in range(2,int(num ** 0.5)+ 1))
+
+
+# print(is_prime(67))
+# print(is_prime1(67))
+# print(is_prime2(67))
+
+
+'''
+day16练习
+题目1：
+    输出：12
+    把一个函数知悉行两次
+'''
+# def apply(func,value):
+#     return func(func(value))
+
+# def double(x):
+#     return x*2
+# print(apply(double,3))
+
+# '''
+# 题目2：一个学生是成绩列表，按成绩高低排序，成绩相同的按照姓名字母排序
+
+# '''
+# students = [('Alice',85),('Bob',92),('Charlie',85),('David',92)]
+
+# new_std = sorted(students,key=lambda x:(-x[1],x[0]))
+# print(new_std)
+
+# '''
+# 题目3：十六进制转换整数
+# '''
+
+# import functools
+
+# hex_to_int = functools.partial(int,base = 16)
+
+# print(hex_to_int('ff'))
+
+# students = [('Alice',85),('Bob',92),('Charlie',85),('David',92)]
+# print(sorted(students,key=lambda x:x[0]))
+# print(sorted(students,key=lambda x:x[1]))
+# print(sorted(students,key=lambda x:x[1],reverse=True))
+# print(sorted(students,key=lambda x:(-x[1],x[0])))
+# print(sorted(students,key=lambda x:(x[1],x[0])))
+# print(sorted(students,key=lambda x:(x[1],x[0]),reverse=True))
