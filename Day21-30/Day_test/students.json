@@ -1,0 +1,26 @@
+[
+  {
+    "name": "张三",
+    "grade": {
+      "Chinese": 66,
+      "Math": 88,
+      "English": 90
+    }
+  },
+  {
+    "name": "李四",
+    "grade": {
+      "Chinese": 75,
+      "Math": 92,
+      "English": 84
+    }
+  },
+  {
+    "name": "王五",
+    "grade": {
+      "Chinese": 80,
+      "Math": 78,
+      "English": 95
+    }
+  }
+]

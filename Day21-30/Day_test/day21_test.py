@@ -140,19 +140,120 @@ from pathlib import Path
 # 用分块读写的方式（每次 1024 字节）复制一个图片文件，并用 with 语法管理文件对象。
 # 如果源文件不存在，捕获 FileNotFoundError 给出友好提示。
 
-file_path = Path(__file__).parent.parent/'res'/'20210803201644.png'
-target_path = Path(__file__).parent/'copy.png'
+# file_path = Path(__file__).parent.parent/'res'/'20210803201644.png'
+# target_path = Path(__file__).parent/'copy.png'
 
-try:
+# try:
 
-    # 读取二进制文件 读 rb 写入 wb
-    with open(file_path, 'rb' ) as file, open(target_path,'wb') as dst:
-        while True:
-            # 分块读写，每次读取1024字节
-            data = file.read(1024)
-            if not data:
-                break
-            dst.write(data)
+#     # 读取二进制文件 读 rb 写入 wb
+#     with open(file_path, 'rb' ) as file, open(target_path,'wb') as dst:
+#         while True:
+#             # 分块读写，每次读取1024字节
+#             data = file.read(1024)
+#             if not data:
+#                 break
+#             dst.write(data)
 
-except FileNotFoundError as err:
+# except FileNotFoundError as err:
+#     print(err)
+
+
+
+
+
+## Day 21 练习题
+
+# **题目一：安全文件读取函数**
+# 编写函数 `safe_read(filepath)`，实现：
+# - 使用 `with` 语句打开文件（UTF-8编码）
+# - 如果文件不存在，打印 "文件不存在" 并返回空字符串
+# - 如果编码错误，打印 "编码错误" 并返回空字符串
+# - 正常情况下返回文件全部内容
+
+from pathlib import Path
+def safe_read(filepath):
+    try:
+        # file_path = Path(__file__).parent / 'log.txt'  不能写死路径
+        with open(filepath, 'r', encoding='utf-8') as file:
+            print(file.read())
+
+    except FileNotFoundError:
+        print("文件不存在")
+        return ''
+    
+    except UnicodeDecodeError:
+        print("编码错误")
+        return ''
+
+
+file_path = Path(__file__).parent / 'log.txt' 
+content = safe_read(file_path)
+print(content)
+
+# **题目二：单词计数器**
+# 编写函数 `count_words(filepath)`，实现：
+# - 读取一个文本文件
+# - 统计文件中每个单词出现的次数（不区分大小写）
+# - 返回一个字典，key 是单词，value 是出现次数
+# - 要求使用 `with` 语句和适当的异常处理
+
+from pathlib import Path
+def count_words(filepath):
+    try:
+        with open(filepath,'r', encoding='utf-8') as file:
+            counter = {}
+            # 统计单词数，不是字符数。转换成小写
+            content = file.read().lower()
+            # 按照空白分割单词
+            words = content.split()
+            for word in words:
+                counter[word] = counter.get(word, 0) + 1
+            return counter
+
+    except FileNotFoundError:
+        print("文件不存在")
+        return {}
+    
+    except UnicodeDecodeError:
+        print("编码错误")
+        return {}
+
+
+file_path = Path(__file__).parent / 'log.txt' 
+res = count_words(file_path)
+print(res)
+
+# **题目三：自定义异常 + 文件写入**
+# - 自定义异常类 `EmptyContentError`，继承 `Exception`
+# - 编写函数 `write_to_file(filepath, content)`：
+#   - 如果 `content` 为空字符串或 None，抛出 `EmptyContentError("内容不能为空")`
+#   - 否则将 content 写入文件（追加模式），每条记录前加上时间戳
+# - 写一段调用代码，用 `try/except` 捕获 `EmptyContentError`
+
+
+from pathlib import Path
+from datetime import datetime
+class EmptyContentError(Exception):
+    pass
+
+def write_to_file(filepath, content):
+    if content == '' or content is None:
+        raise EmptyContentError("内容不能为空")
+    
+
+    current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    new_content = f'[{content}] {current_time}\n'
+    
+
+    with open(filepath, 'a', encoding='utf-8') as file:
+        file.write(new_content)
+
+
+
+
+file_path = Path(__file__).parent / 'log.txt' 
+try:    
+    write_to_file(file_path, 'abcdd')
+    print("写入成功")
+except EmptyContentError as err:
     print(err)
