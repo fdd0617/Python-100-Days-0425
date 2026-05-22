@@ -1,0 +1,20 @@
+from pathlib import Path
+def word_count(filepath):
+    try:
+        with open(filepath, 'r', encoding='utf-8') as file:
+            all_counts = {}
+            # 全部转换成小写
+            content = file.read().lower()
+            # 单词用空白分割
+            words = content.split()
+            for word in words:
+                all_counts[word] = all_counts.get(word, 0) + 1
+            return all_counts
+    
+    except FileNotFoundError:
+        print('文件不存在')
+
+
+file_path = Path(__file__).parent / 'log1.txt'
+res = word_count(file_path)
+print(res)

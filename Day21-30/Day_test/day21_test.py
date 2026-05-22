@@ -175,7 +175,8 @@ def safe_read(filepath):
     try:
         # file_path = Path(__file__).parent / 'log.txt'  不能写死路径
         with open(filepath, 'r', encoding='utf-8') as file:
-            print(file.read())
+            # print(file.read())
+            return file.read()
 
     except FileNotFoundError:
         print("文件不存在")
@@ -237,7 +238,8 @@ class EmptyContentError(Exception):
     pass
 
 def write_to_file(filepath, content):
-    if content == '' or content is None:
+    if not content:
+    # if content == '' or content is None:
         raise EmptyContentError("内容不能为空")
     
 
