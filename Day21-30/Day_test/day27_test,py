@@ -1,0 +1,75 @@
+import PyPDF2
+
+# # 读取PDF文件
+# reader = PyPDF2.PdfReader('XGBoost.pdf')
+# # 生成新的PDF文件
+# writer = PyPDF2.PdfFileWriter()
+
+# # 遍历PDF的每一页，按照页码，页。no从0开始
+# for no, page in enumerate(reader.pages):
+#     # 奇偶判断 逆时针旋转
+#     if no % 2 == 0:
+#         nw_page = page.rotate(-90)
+
+#     else:
+#         new_page = page.rotate(90)
+
+#     # 旋转后的页面加入到新PDF中
+#     writer.add_page(new_page)
+
+# # 把新的PDF写入到temp文件中
+# with open('temp.pdf', 'wb') as file_obj:
+#     writer.write(file_obj)
+
+# 读取
+# reader = PyPDF2.PdfReader('XGBoost.pdf')
+# # 创建
+# writer = PyPDF2.PdfWriter()
+
+# # 遍历原PDF的每一页，添加到新PDF中
+# for page in reader.pages:
+#     writer.add_page(page)
+
+# # 加密
+# writer.encrypt('123456')
+
+# with open('temp.pdf','wb') as file_obj:
+#     writer.write(file_obj)
+
+
+# # 解密
+# # 读取PDF
+# reader = PyPDF2.PdfReader('temp.pdf')
+
+# # 判断是否被加密
+# if reader.is_encrypted:
+#     # 解密密码
+#     reader.decrypt('123456')
+
+# # 遍历所有页面
+# for page in reader.pages:
+#     # 提取页面文字
+#     print(page.extract_text())
+
+
+# 添加水印
+# 以第二个文件的第一页为水印，加到第一个文件
+reader1 = PyPDF2.PdfReader('XGBoost.pdf')
+reader2 = PyPDF2.PdfReader('watermark.pdf')
+
+# 创建新文件
+writer = PyPDF2.PdfWriter()
+
+# 提取要作为水印的页面
+watermark_page = reader2.pages[0]
+
+# 遍历第一个文件
+for page in reader1.pages:
+    # 加水印 merge_page() 会把另一个 PDF 页面合并到当前页面上。
+    page.merge_page(watermark_page)
+    # 写入新文件
+    writer.add_page(page)
+
+# 最终结果写入temp文件中 wb 二进制模式
+with open('temp.pdf','wb') as file_obj:
+    writer.write(file_obj)
