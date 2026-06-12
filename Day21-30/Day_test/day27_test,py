@@ -1,4 +1,4 @@
-import PyPDF2
+# import PyPDF2
 
 # # 读取PDF文件
 # reader = PyPDF2.PdfReader('XGBoost.pdf')
@@ -54,22 +54,359 @@ import PyPDF2
 
 # 添加水印
 # 以第二个文件的第一页为水印，加到第一个文件
-reader1 = PyPDF2.PdfReader('XGBoost.pdf')
-reader2 = PyPDF2.PdfReader('watermark.pdf')
+# reader1 = PyPDF2.PdfReader('XGBoost.pdf')
+# reader2 = PyPDF2.PdfReader('watermark.pdf')
 
-# 创建新文件
+# # 创建新文件
+# writer = PyPDF2.PdfWriter()
+
+# # 提取要作为水印的页面
+# watermark_page = reader2.pages[0]
+
+# # 遍历第一个文件
+# for page in reader1.pages:
+#     # 加水印 merge_page() 会把另一个 PDF 页面合并到当前页面上。
+#     page.merge_page(watermark_page)
+#     # 写入新文件
+#     writer.add_page(page)
+
+# # 最终结果写入temp文件中 wb 二进制模式
+# with open('temp.pdf','wb') as file_obj:
+#     writer.write(file_obj)
+
+# 练习 1：提取 PDF 文本
+
+# 编写程序读取 XGBoost.pdf，提取每一页的文本内容，并按下面格式输出：
+
+# ========== 第 1 页 ==========
+# 页面文本内容...
+
+# ========== 第 2 页 ==========
+# 页面文本内容...
+# 要求：
+
+# 使用 PyPDF2.PdfReader
+# 遍历 reader.pages
+# 使用 page.extract_text()
+# 如果某一页没有提取到文字，输出：本页没有可提取文本
+
+# from pathlib import Path
+# import PyPDF2
+
+# file_path = Path(__file__).parent / 'XGBoost.pdf'
+# # 读取PDF文件
+# reader = PyPDF2.PdfReader(file_path)
+# # 遍历每一页内容
+# # for page in reader.pages:
+# #     if page.extract_text() is None:
+# #         print("本页没有可提取文本")
+# #     else:
+# #         # 提取页面文字
+# #         print(page.extract_text())
+# for no, page in enumerate(reader.pages, start=1):
+#     print(f"========== 第 {no} 页 ==========")
+
+#     text = page.extract_text()
+
+#     if text is None:
+#         print('本页没有可提取文本')
+#     else:
+#         print(text)
+
+
+# 练习 2：统计 PDF 页数和文字数量
+
+# 编写程序读取一个 PDF 文件，统计：
+
+# PDF 总页数
+# 每一页提取出的文字长度
+# 整个 PDF 的总文字数量
+# 示例输出：
+
+# PDF 总页数：10
+# 第 1 页文字数：532
+# 第 2 页文字数：418
+# ...
+# 全文总文字数：5021
+# 提示：
+
+# len(reader.pages)
+# len(text)
+# 注意处理 extract_text() 返回 None 的情况。
+
+
+# from pathlib import Path
+# import PyPDF2
+
+# file_path = Path(__file__).parent / 'XGBoost.pdf'
+# reader = PyPDF2.PdfReader(file_path)
+
+# # total_page = 0
+# # for page in reader.pages:
+# #     total_page += 1
+
+# total_page = len(reader.pages)
+
+# print(f"PDF 总页数：{total_page}")
+
+# # for no, page in enumerate(reader.pages, start=1):
+# #     page_count = 0
+# #     for _ in page.extract_text():
+# #         page_count += 1
+    
+# #     print(f"第 {no} 页文字数：{page_count}")
+
+# # page_counts = 0
+# # for no, page in enumerate(reader.pages, start=1):
+# #     for _ in page.extract_text():
+# #         page_counts += 1
+    
+# # print(f"全文总文字数：{page_counts}")
+
+# # 改进：一边遍历一边统计每页总字数，使用text变量接收每页提取的文字
+# total_chars = 0
+# for no, page in enumerate(reader.pages, start=1):
+#     text = page.extract_text()
+
+#     if text is None:
+#         text = ""
+#     # 读取当前页的字数
+#     page_chars = len(text)
+#     # 累加每页的字数
+#     total_chars += page_chars
+
+#     print(f"第 {no} 页文字数：{page_chars}")
+
+# print(f"全文总文字数：{total_chars}")
+
+
+# 练习 3：批量旋转 PDF 页面
+
+# 读取 XGBoost.pdf，生成一个新文件 rotated.pdf。
+
+# 要求：
+
+# 第 1、3、5 页顺时针旋转 90 度
+# 第 2、4、6 页逆时针旋转 90 度
+# 原文件不能被修改
+# 注意：enumerate(reader.pages) 得到的索引从 0 开始，所以实际页码应该是 no + 1。
+
+# from pathlib import Path
+# import PyPDF2
+
+# # 加载文件
+# file_path = Path(__file__).parent / 'XGBoost.pdf'
+# output_path = Path(__file__).parent / 'rotated.pdf'
+
+# # 读取原PDF
+# reader = PyPDF2.PdfReader(file_path)
+# # 创建新PDF文件 
+# # 更正： 创建PDF写入器，用来保存处理后的页面
+# writer = PyPDF2.PdfWriter()
+# # 遍历页码和页面，遍历每一页，同时获取页码
+# for no, page in enumerate(reader.pages, start=1):
+#     # 判断页码奇偶，进行旋转
+#     if no % 2 == 0:
+#         new_page = page.rotate(-90)
+#     else:
+#         new_page = page.rotate(90)
+#     # 旋转后的页面写入新PDF
+#     writer.add_page(new_page)
+# # 将新PDF写入到rotated.pdf中
+# with open(output_path, 'wb') as file_obj:
+#     writer.write(file_obj)
+
+# print(f'已生成文件：{output_path}')
+
+
+# 练习 4：给 PDF 添加密码
+
+# 读取 XGBoost.pdf，生成一个加密后的 encrypted.pdf。
+
+# 要求：
+
+# 新 PDF 内容和原 PDF 一样
+# 打开新 PDF 时需要输入密码
+# 密码设置为 python123
+# 原 PDF 不被修改
+# 核心方法：
+
+# writer.encrypt('python123')
+# from pathlib import Path
+# import PyPDF2
+
+# # 加载文件
+# file_path = Path(__file__).parent / 'XGBoost.pdf'
+# out_path = Path(__file__).parent / 'encrypted.pdf'
+# # 读取源文件
+# reader = PyPDF2.PdfReader(file_path)
+# # 创建PDF写入器，用于存放处理后的页面
+# writer = PyPDF2.PdfWriter()
+
+
+# # 遍历原文件每一页，加入到写入器中
+# for page in reader.pages:
+#     writer.add_page(page)
+
+# # 加密 给新 PDF 设置打开密码
+# writer.encrypt('python123')
+# # 创建新文件，写入内容  将加密后的 PDF 内容写入新文件
+# with open(out_path, 'wb') as file_obj:
+#     writer.write(file_obj)
+
+# print(f'{out_path} 加密完成')
+
+
+# 练习 5：读取加密 PDF
+
+# 读取上一题生成的 encrypted.pdf。
+
+# 要求：
+
+# 判断 PDF 是否加密
+# 如果加密，使用密码 python123 解密
+# 解密成功后，输出 PDF 总页数
+# 尝试提取第一页文字
+# 提示：
+
+# if reader.is_encrypted:
+#     reader.decrypt('python123')
+
+
+# from pathlib import Path
+# import PyPDF2
+
+# # 加载文件
+# file_path = Path(__file__).parent / 'encrypted.pdf'
+# # 读取源文件
+# reader = PyPDF2.PdfReader(file_path)
+
+# # 如果被加密，使用密码解密
+# if reader.is_encrypted:
+#     # 判断密码是否正确
+#     result = reader.decrypt('python1233')
+#     if result == 0:
+#         print("解密失败，密码错误")
+#         exit()
+#     else:
+#         print("解密成功")
+
+# # 页数不用循环统计，直接len计算、
+# print(f"PDF 总页数：{len(reader.pages)}")
+# # total_pages = 0
+# # # 遍历原文件每一页，加入到写入器中
+# # for no, page in enumerate(reader.pages, start=1):
+# #     total_pages += 1
+# #     if no == 1:
+# #         print(f"{page.extract_text()}")
+
+# # print(f"{total_pages}")
+
+# first_page = reader.pages[0]
+# text = first_page.extract_text()
+# if text:
+#     print(text)
+# else:
+#     print("第一页没有可提取文本")
+
+
+
+
+
+# 练习 6：给 PDF 添加水印
+
+# 读取 XGBoost.pdf 和 watermark.pdf，生成 watermarked.pdf。
+
+# 要求：
+
+# 使用 watermark.pdf 的第一页作为水印
+# 给 XGBoost.pdf 的每一页都添加水印
+# 保存为新文件
+# 核心方法：
+
+# page.merge_page(watermark_page)
+# 思考题：
+
+# 如果水印位置不对，可能是什么原因？
+# 如果水印 PDF 尺寸和原 PDF 尺寸不一致，会有什么影响？
+
+# from pathlib import Path
+# import PyPDF2
+
+# # 加载文件
+# file_path = Path(__file__).parent / 'XGBoost.pdf'
+# file_path2 = Path(__file__).parent / 'watermark.pdf'
+# out_path = Path(__file__).parent / 'watermarked.pdf'
+# # 读取源文件
+# reader1 = PyPDF2.PdfReader(file_path)
+# reader2 = PyPDF2.PdfReader(file_path2)
+# # 创建写入器 存储处理后的页面
+# writer = PyPDF2.PdfWriter()
+# # 获取水印页面
+# watermark_page = reader2.pages[0]
+# # 遍历每一页，增加水印，处理后的页面加入到写入器
+# for page in reader1.pages:
+#     page.merge_page(watermark_page)
+#     writer.add_page(page)
+# # 将写入器中的数据放入watermarked.pdf，
+# # 将添加水印后的 PDF 内容写入 watermarked.pdf
+# with open(out_path, 'wb') as file_obj:
+#     writer.write(file_obj)
+# print('水印添加成功')
+
+
+
+# 合并PDF
+
+# from pathlib import Path
+# import PyPDF2
+
+# # 加载文件
+# file_path = Path(__file__).parent / 'XGBoost.pdf'
+# file_path2 = Path(__file__).parent / 'rotated.pdf'
+# out_path = Path(__file__).parent / 'hb.pdf'
+
+# reader1 = PyPDF2.PdfReader(file_path)
+# reader2 = PyPDF2.PdfReader(file_path2)
+
+# writer = PyPDF2.PdfWriter()
+
+# for page1 in reader1.pages:
+#     writer.add_page(page1)
+
+# for page2 in reader2.pages:
+#     writer.add_page(page2)
+
+
+# with open(out_path, 'wb') as file_obj:
+#     writer.write(file_obj)
+
+
+from pathlib import Path
+import PyPDF2
+
+# 设置文件路径
+base_dir = Path(__file__).parent
+# 创建文件列表
+pdf_paths = [
+    base_dir / 'XGBoost.pdf',
+    base_dir / 'rotated.pdf',
+]
+# 设置输出文件路径
+out_path = base_dir / 'hb.pdf'
+# 创建PDF写入器
 writer = PyPDF2.PdfWriter()
+# 遍历文件列表  遍历要合并的 PDF 文件列表
+for pdf_path in pdf_paths:
+    # 依次读取每个PDF
+    reader = PyPDF2.PdfReader(pdf_path)
+    # 遍历每个页面
+    for page in reader.pages:
+        # 加入写入器
+        writer.add_page(page)
 
-# 提取要作为水印的页面
-watermark_page = reader2.pages[0]
-
-# 遍历第一个文件
-for page in reader1.pages:
-    # 加水印 merge_page() 会把另一个 PDF 页面合并到当前页面上。
-    page.merge_page(watermark_page)
-    # 写入新文件
-    writer.add_page(page)
-
-# 最终结果写入temp文件中 wb 二进制模式
-with open('temp.pdf','wb') as file_obj:
+# 将写入器的内容放入文件中  将合并后的 PDF 内容写入输出文件
+with open(out_path, 'wb') as file_obj:
     writer.write(file_obj)
+
+print(f'PDF 合并完成：{out_path}')
